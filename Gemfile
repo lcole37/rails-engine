@@ -37,6 +37,7 @@ group :development, :test do
   gem 'faker'
   gem 'orderly'
   gem 'pry'
+  gem 'shoulda-matchers'
 end
 
 group :development do
