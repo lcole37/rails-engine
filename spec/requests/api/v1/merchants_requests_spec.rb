@@ -13,4 +13,19 @@ describe "Merchants API" do
     expect(merchants).to be_a(Array)
     expect(merchants.count).to eq(3)
   end
+
+  it "can get one merchant by its ID" do
+    id = create(:merchant).id
+
+    get "/api/v1/merchants/#{id}"
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+
+    expect(merchant).to have_key(:id)
+    expect(merchant).to have_key(:name)
+    expect(merchant[:name]).to be_a(String)
+    expect(merchant[:id]).to be_an(Integer)
+  end
 end
