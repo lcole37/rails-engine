@@ -38,6 +38,7 @@ group :development, :test do
   gem 'orderly'
   gem 'pry'
   gem 'shoulda-matchers'
+  gem 'jsonapi-serializer'
 end
 
 group :development do

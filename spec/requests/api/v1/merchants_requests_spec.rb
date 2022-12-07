@@ -7,11 +7,11 @@ describe "Merchants API" do
     get '/api/v1/merchants'
 
     expect(response).to be_successful
+    merchants_response = JSON.parse(response.body, symbolize_names: true)
     # require "pry"; binding.pry
-    merchants = JSON.parse(response.body, symbolize_names: true)
 
-    expect(merchants).to be_a(Array)
-    expect(merchants.count).to eq(3)
+    expect(merchants_response).to be_a(Hash)
+    expect(merchants_response[:data].count).to eq(3)
   end
 
   it "can get one merchant by its ID" do
@@ -19,13 +19,14 @@ describe "Merchants API" do
 
     get "/api/v1/merchants/#{id}"
 
-    merchant = JSON.parse(response.body, symbolize_names: true)
-
     expect(response).to be_successful
 
+    merchant_response = JSON.parse(response.body, symbolize_names: true)
+    merchant = merchant_response[:data]
+
     expect(merchant).to have_key(:id)
-    expect(merchant).to have_key(:name)
-    expect(merchant[:name]).to be_a(String)
-    expect(merchant[:id]).to be_an(Integer)
+    expect(merchant[:attributes]).to have_key(:name)
+    expect(merchant[:attributes][:name]).to be_a(String)
+    expect(merchant[:id]).to be_an(String)
   end
 end
