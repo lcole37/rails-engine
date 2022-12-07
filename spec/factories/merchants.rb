@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :merchant do
-    # binding.pry
-    # name { Merchant.first.name }
+    name { Faker::Name.name }
   end
 end
