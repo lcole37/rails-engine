@@ -161,6 +161,9 @@ describe " Items API" do
 
     response_body = JSON.parse(response.body, symbolize_names: true)
     merchant = response_body[:data]
-
   end
+
+  # it 'can find one item' do
+  #
+  # end
 end
