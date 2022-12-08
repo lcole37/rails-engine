@@ -20,7 +20,6 @@ describe " Items API" do
 
       expect(item[:attributes]).to have_key(:name)
       expect(item[:attributes][:name]).to be_an(String)
-      # require "pry"; binding.pry
 
       expect(item[:attributes]).to have_key(:description)
       expect(item[:attributes][:description]).to be_an(String)
@@ -43,7 +42,6 @@ describe " Items API" do
     item_response = JSON.parse(response.body, symbolize_names: true)
     item = item_response[:data]
 
-    # require "pry"; binding.pry
     expect(item).to have_key(:id)
     expect(item[:id]).to be_an(String)
     expect(item[:id]).to eq("#{id}")
@@ -62,7 +60,6 @@ describe " Items API" do
     @merchant = create(:merchant)
     items = create_list(:item, 3, merchant: @merchant)
 
-    # get "/api/v1/merchants/#{@merchant.id}/items"
     get api_v1_merchant_items_path(@merchant.id)
 
     expect(response).to be_successful
@@ -70,7 +67,6 @@ describe " Items API" do
     items_response = JSON.parse(response.body, symbolize_names: true)
 
     items = items_response[:data]
-    # require "pry"; binding.pry
 
     expect(items.count).to eq(3)
 
@@ -84,6 +80,43 @@ describe " Items API" do
   end
 
   it "can create a new item and delete it" do
-    #items create
+    item_params = ({
+      name: Faker:: Commerce.product_name,
+      description: Faker::Lorem.paragraph,
+      unit_price: Faker::Number.decimal(l_digits: 2, r_digits: 2),
+      merchant_id: create(:merchant).id
+      })
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+    created_item = Item.last
+
+    expect(response).to be_successful
+    expect(created_item.name).to eq(item_params[:name])
+    expect(created_item.description).to eq(item_params[:description])
+    expect(created_item.unit_price).to eq(item_params[:unit_price])
+    expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+
+    delete "/api/v1/items/#{created_item.id}"
+
+    expect(response).to be_successful
+    expect(Item.count).to eq(0)
+    expect{Item.find(created_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it "can update an existing item" do
+    id = create(:item).id
+    previous_name = Item.last.name
+    item_params = { name: Faker::Commerce.product_name}
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    # We include this header to make sure that these params are passed as JSON rather than as plain text
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    item = Item.find_by(id: id)
+
+    expect(response).to be_successful
+    expect(item.name).to_not eq(previous_name)
+    expect(item.name).to eq(item.name)
   end
 end
