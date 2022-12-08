@@ -126,6 +126,29 @@ describe " Items API" do
     get "/api/v1/items/#{id}"
 
     expect(response).to have_http_status(404)
+
+    #create 404
+    item_params = ({
+      description: Faker::Lorem.paragraph,
+      unit_price: Faker::Number.decimal(l_digits: 2, r_digits: 2),
+      merchant_id: create(:merchant).id
+      })
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+    expect(response).to have_http_status(404)
+
+    # update 404
+    item_params = { name: Faker::Commerce.product_name}
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+
+    expect(response).to have_http_status(404)
+
+    #delete 404
+    delete "/api/v1/items/#{id}"
+
+    expect(response).to have_http_status(404)
   end
 
   it "can return the items merchant" do
