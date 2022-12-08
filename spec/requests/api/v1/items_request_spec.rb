@@ -56,7 +56,7 @@ describe " Items API" do
     expect(item[:attributes][:merchant_id]).to be_an(Integer)
   end
 
-  it 'can return items for given merchant' do
+  it 'can return items for given merchant' do #merchant items
     @merchant = create(:merchant)
     items = create_list(:item, 3, merchant: @merchant)
 
@@ -118,5 +118,26 @@ describe " Items API" do
     expect(response).to be_successful
     expect(item.name).to_not eq(previous_name)
     expect(item.name).to eq(item.name)
+  end
+
+  it 'returns 404 if item is not found' do
+    id = 9999999
+
+    get "/api/v1/items/#{id}"
+
+    expect(response).to have_http_status(404)
+  end
+
+  it "can return the items merchant" do
+    id = create(:merchant).id
+    item = create(:item, merchant_id: id)
+
+    get "/api/v1/items/#{item.id}/merchant"
+
+    expect(response).to be_successful
+
+    response_body = JSON.parse(response.body, symbolize_names: true)
+    merchant = response_body[:data]
+
   end
 end

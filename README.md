@@ -1,24 +1,41 @@
-# README
+rails-engine: Rails API project by Lucas Colwell
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Directions after cloning
 
-Things you may want to cover:
+bundle install
 
-* Ruby version
+rails db:{drop,create,migrate,seed}
 
-* System dependencies
+rails db:schema:dump
 
-* Configuration
+rails s
 
-* Database creation
+Endpoints available by navigating to localhost in browser:
 
-* Database initialization
+Get all Merchants
 
-* How to run the test suite
+GET http://localhost:3000/api/v1/merchants
 
-* Services (job queues, cache servers, search engines, etc.)
+Get one Merchant
 
-* Deployment instructions
+GET http://localhost:3000/api/v1/merchants/<merchant_id>
 
-* ...
+Get all Merchant Items
+
+GET http://localhost:3000/api/v1/merchants/<merchant_id>/items
+
+Get all Items
+
+GET http://localhost:3000/api/v1/items
+
+Get one Item
+
+GET http://localhost:3000/api/v1/items/<item_id>
+
+Create/Delete Item
+
+POST/DELETE http://localhost:3000/api/v1/items
+
+Update Item
+
+PUT http://localhost:3000/api/v1/items/<item_id>
