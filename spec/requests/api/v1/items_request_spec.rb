@@ -100,7 +100,7 @@ describe " Items API" do
 
     delete "/api/v1/items/#{created_item.id}"
 
-    expect(response).to be_successful
+    expect(response).to have_http_status(204)
     expect(Item.count).to eq(0)
     expect{Item.find(created_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
