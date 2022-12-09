@@ -8,7 +8,6 @@ describe "Merchants API" do
 
     expect(response).to be_successful
     merchants_response = JSON.parse(response.body, symbolize_names: true)
-    # require "pry"; binding.pry
 
     expect(merchants_response).to be_a(Hash)
     expect(merchants_response[:data].count).to eq(3)
@@ -82,7 +81,6 @@ describe "Merchants API" do
 
   it "returns error message if no merchant matches search" do
     create_list(:merchant, 5)
-
     search_name = "fakename"
 
     get "/api/v1/merchants/find?name=#{search_name}"
@@ -91,6 +89,7 @@ describe "Merchants API" do
 
     response_body = JSON.parse(response.body, symbolize_names: true)
     merchant = response_body[:data]
+
     expect(merchant).to eq({:message => 'Merchant not found'})
   end
 end
