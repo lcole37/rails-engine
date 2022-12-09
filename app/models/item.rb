@@ -8,7 +8,7 @@ class Item < ApplicationRecord
   has_many :invoices, through: :invoice_items
   belongs_to :merchant
 
-  # def self.find_item
+  # def self.find_items
   #
   # end
 end
